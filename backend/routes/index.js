@@ -5,7 +5,8 @@ const fs = require('fs')
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
-router.get('/translateToEnglish', function(req, res, next) {
+// get fulllist of words 
+router.get('/list', function(req, res, next) {
   fs.readFile('./db/db.json','utf-8',(err,data)=>{
     if(err){
       console.log(err)
@@ -13,7 +14,35 @@ router.get('/translateToEnglish', function(req, res, next) {
         error:true
       })
     }
-    console.log(JSON.parse(data))
+    res.status(200)
+    res.json({
+      response:JSON.parse(data),
+      error:false
+    })
   })
 });
+// translate a word
+router.get('/translateToIPA/:word', function(req, res, next) {
+  fs.readFile('./db/db.json','utf-8',(err,data)=>{
+    if(err){
+      console.log(err)
+      res.json({
+        error:true
+      })
+    }
+    let db = JSON.parse(data)
+    db.map(item=>{
+      if(item.englishName == req.params.word){
+      res.status(200)
+      res.json({
+      response:item.ipaText,
+      englishName:item.englishName,
+      status:true
+    })
+      }
+    })
+
+  })
+});
+
 module.exports = router;
