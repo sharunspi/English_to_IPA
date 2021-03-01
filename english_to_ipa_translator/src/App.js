@@ -7,11 +7,13 @@ import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import SearchIcon from '@material-ui/icons/Search';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Input from '@material-ui/core/Input';
-import AlarmIcon from '@material-ui/icons/';
+import { Container } from '@material-ui/core';
+// import AlarmIcon from '@material-ui/icons/';
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -26,6 +28,8 @@ const useStyles = makeStyles((theme) => ({
 function App() {
   const classes = useStyles();
   const [ipaValue,setIPAValue] = useState('')
+  const [englishWord,setEnglishWord] = useState('')
+
   useEffect(()=>{
     getIPAData("gagner").then(res=>{
       console.log(res)
@@ -33,15 +37,12 @@ function App() {
       console.log(err)
     })
   },[])
-  const inputValue = (value)=>{
-    console.log(value)
-      setTimeout(()=>{
-        getIPAData(value).then(res=>{
+  const inputValue = ()=>{
+        getIPAData(englishWord).then(res=>{
           setIPAValue(res.data.response)
         }).catch(err=>{
           console.log(err)
         })
-      },2000)
   }
   return (
 <div>
@@ -56,10 +57,21 @@ function App() {
       <Button color="inherit">Login</Button>
     </Toolbar>
   </AppBar>
-  <Input  onChange={e=>{
-    inputValue(e.target.value)
+    <Container>
+    <Input 
+    placeholder="English word"
+         label="English word"
+         id="standard-start-adornment"
+    onChange={e=>{
+    setEnglishWord(e.target.value)
   }}/>
+    <IconButton type="submit" className={classes.iconButton} aria-label="search" onClick={()=>{
+      inputValue()
+    }}>
+        <SearchIcon />
+      </IconButton>
   <h3> {ipaValue}</h3>
+      </Container>
 </div>
   );
 }
