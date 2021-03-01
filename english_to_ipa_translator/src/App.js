@@ -1,15 +1,17 @@
 import logo from './logo.svg';
 import './App.css';
-import db from './db/DB'
+// import db from './db/DB'
+import {useEffect} from 'react'
 function App() {
+  // useEffect(()=>{
+  
+  // },[])
   return (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-         {
-           db[0].englishName
-         }
+
         </p>
         <a
           className="App-link"
