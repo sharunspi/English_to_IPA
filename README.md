@@ -7,3 +7,13 @@
  list all words and it's IPA words
  2. `'/translateToIPA/:word'`
  get IPA word of a english word
+
+## Development
+### Start React server
+'`cd english_to_ipa_translator`'
+'`npm start`'
+### Start Backend server
+'`cd backend`'
+'`npm start`'
+ ## Support
+ English to IPA datas are collected from 
