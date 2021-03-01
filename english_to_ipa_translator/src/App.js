@@ -12,7 +12,8 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Input from '@material-ui/core/Input';
-import { Container } from '@material-ui/core';
+import { Container,Grid } from '@material-ui/core';
+import CircularProgress from '@material-ui/core/CircularProgress';
 // import AlarmIcon from '@material-ui/icons/';
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -29,7 +30,7 @@ function App() {
   const classes = useStyles();
   const [ipaValue,setIPAValue] = useState('')
   const [englishWord,setEnglishWord] = useState('')
-
+  const [searchStatus,setSearchStatus] = useState(false)
   useEffect(()=>{
     getIPAData("gagner").then(res=>{
       console.log(res)
@@ -38,11 +39,20 @@ function App() {
     })
   },[])
   const inputValue = ()=>{
+    setSearchStatus(true)
         getIPAData(englishWord).then(res=>{
           setIPAValue(res.data.response)
+          setSearchStatus(false)
         }).catch(err=>{
-          console.log(err)
+          console.log(err)    
+           
+          setSearchStatus(false)
         })
+  }
+  const searching = ()=>{
+    return <div>
+      <CircularProgress /> <h3> Searching ...</h3>
+    </div>
   }
   return (
 <div>
@@ -57,7 +67,17 @@ function App() {
       <Button color="inherit">Login</Button>
     </Toolbar>
   </AppBar>
-    <Container>
+ 
+
+<Container>
+<Grid
+  container
+  spacing={0}
+  direction="column"
+  alignItems="center"
+  justify="center"
+  style={{ minHeight: '100vh' }}
+>
     <Input 
     placeholder="English word"
          label="English word"
@@ -70,8 +90,15 @@ function App() {
     }}>
         <SearchIcon />
       </IconButton>
-  <h3> {ipaValue}</h3>
-      </Container>
+  <h3> { searchStatus &&   searching() }</h3>
+  <Typography variant="h3" gutterBottom>
+        {ipaValue}
+      </Typography>
+  </Grid> 
+
+      </Container> 
+
+    
 </div>
   );
 }
