@@ -10,10 +10,12 @@ import Typography from '@material-ui/core/Typography';
 import SearchIcon from '@material-ui/icons/Search';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
+
 import Input from '@material-ui/core/Input';
 import { Container,Grid } from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Snackbar from '@material-ui/core/Snackbar';
+import Header from './Components/Header'
 // import AlarmIcon from '@material-ui/icons/';
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -31,21 +33,55 @@ function App() {
   const [ipaValue,setIPAValue] = useState('')
   const [englishWord,setEnglishWord] = useState('')
   const [searchStatus,setSearchStatus] = useState(false)
-  useEffect(()=>{
-    getIPAData("gagner").then(res=>{
-      console.log(res)
-    }).catch(err=>{
-      console.log(err)
-    })
-  },[])
+  const [state, setState] = useState({
+    open: false,
+    vertical: 'top',
+    horizontal: 'center',
+    message:''
+  });
+  const { vertical, horizontal, open,message } = state;
+
+  // useEffect(()=>{
+  //   getIPAData("gagner").then(res=>{
+  //     console.log(res)
+  //   }).catch(err=>{
+  //     console.log(err)
+  //   })
+  // },[])
+  const handleClick = (newState) => () => {
+    setState({ open: true, ...newState });
+  };
+  const handleClose = () => {
+    setState({ ...state, open: false });
+  };
   const inputValue = ()=>{
+    setIPAValue('')
+    handleClick({
+      message:'Result found ',
+      vertical:'bottom',
+      horizontal:'center'
+    })
     setSearchStatus(true)
         getIPAData(englishWord).then(res=>{
+         if(res.data.status){
           setIPAValue(res.data.response)
           setSearchStatus(false)
+          handleClick({
+            message:'Result found ',
+            vertical:'bottom',
+            horizontal:'center'
+          })
+         }else{
+           setSearchStatus(false)
+           handleClick({
+            message:'No search results found'
+          })
+         }
         }).catch(err=>{
           console.log(err)    
-           
+          handleClick({
+            message:'Error !'
+          })
           setSearchStatus(false)
         })
   }
@@ -56,19 +92,7 @@ function App() {
   }
   return (
 <div>
-<AppBar position="static">
-    <Toolbar>
-      <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-        <MenuIcon />
-      </IconButton>
-      <Typography variant="h6" className={classes.title}>
-        English to IPA translator
-      </Typography>
-      <Button color="inherit">Login</Button>
-    </Toolbar>
-  </AppBar>
- 
-
+<Header />
 <Container>
 <Grid
   container
@@ -98,7 +122,14 @@ function App() {
 
       </Container> 
 
-    
+    {/* snackbar */}
+    <Snackbar
+        anchorOrigin={{ vertical, horizontal }}
+        open={open}
+        onClose={handleClose}
+        message={message}
+        key={vertical + horizontal}
+      />
 </div>
   );
 }

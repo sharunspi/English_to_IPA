@@ -23,6 +23,7 @@ router.get('/list', function(req, res, next) {
 });
 // translate a word
 router.get('/translateToIPA/:word', function(req, res, next) {
+  let found =false
   fs.readFile('./db/db.json','utf-8',(err,data)=>{
     if(err){
       console.log(err)
@@ -33,14 +34,22 @@ router.get('/translateToIPA/:word', function(req, res, next) {
     let db = JSON.parse(data)
     db.map(item=>{
       if(item.englishName == req.params.word){
+        found =true
       res.status(200)
       res.json({
       response:item.ipaText,
       englishName:item.englishName,
-      status:true
+      status:true,
+      error:false
     })
       }
     })
+    if(!found){
+      res.status(200)
+      res.json({
+        status:false
+      })
+    }
 
   })
 });
