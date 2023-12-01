@@ -7,6 +7,7 @@ import { getIPAData } from "../API/index";
 import { useState } from "react";
 import { Searching, NoWordsFound } from "../Components/Notification";
 import { makeStyles } from "@material-ui/core/styles";
+import ResultBox from "../Components/ResultBox";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -47,52 +48,47 @@ const Index = () => {
   };
 
   return (
-    <Container>
-      <Grid
-        container
-        spacing={0}
-        direction="column"
-        alignItems="center"
-        justify="center"
-        style={{ minHeight: "100vh" }}
+    <div
+      style={{
+        padding: "12px",
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          width: "100%",
+          marginTop: "2%",
+        }}
       >
-        <div
-          style={{
-            display: "flex",
+        <Input
+          placeholder="English word"
+          label="English word"
+          id="standard-start-adornment"
+          onChange={(e) => {
+            setEnglishWord(e.target.value);
+            if (e.target.value) {
+              setIPAValue("");
+            }
           }}
+        />
+        <IconButton
+          type="submit"
+          className={classes.iconButton}
+          aria-label="search"
+          onClick={() => {
+            inputValue();
+          }}
+          onSubmit={inputValue}
         >
-          <Input
-            placeholder="English word"
-            label="English word"
-            id="standard-start-adornment"
-            onChange={(e) => {
-              setEnglishWord(e.target.value);
-              if (e.target.value) {
-                setIPAValue("");
-              }
-            }}
-          />
-          <IconButton
-            type="submit"
-            className={classes.iconButton}
-            aria-label="search"
-            onClick={() => {
-              inputValue();
-            }}
-            onSubmit={inputValue}
-          >
-            <SearchIcon />
-          </IconButton>
-        </div>
-
+          <SearchIcon />
+        </IconButton>
+      </div>
+      <div>
         {searchStatus && <Searching />}
-        {englishWord && (
-          <Typography variant="h3" gutterBottom>
-            {ipaValue === "" ? <NoWordsFound /> : ipaValue}
-          </Typography>
-        )}
-      </Grid>
-    </Container>
+        {ipaValue && <ResultBox result={ipaValue} englishWord={englishWord} />}
+      </div>
+    </div>
   );
 };
 

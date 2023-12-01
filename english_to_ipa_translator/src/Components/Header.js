@@ -7,6 +7,7 @@ import {
   Button,
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
+import { Link } from "react-router-dom";
 export default class Header extends Component {
   render() {
     return (
@@ -33,8 +34,9 @@ export default class Header extends Component {
             </Typography>
           </div>
           {/* <Button color="inherit">Login</Button> */}
-
-          <Typography>About us</Typography>
+          <Link to={"/about"}>
+            <Typography>About us</Typography>
+          </Link>
         </Toolbar>
       </AppBar>
     );
