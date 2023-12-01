@@ -10,11 +10,14 @@ This Javascript based programe uses [English text into the International Phoneti
  get IPA word of a english word
 
 ## Development
+
 ### Start React server
 '`cd english_to_ipa_translator`'
+'`npm intsall`'
 '`npm start`'
 ### Start Backend server
 '`cd backend`'
+'`npm intsall`'
 '`npm start`'
  ## Support
 Database is available at `'backend/db/db.json'`
